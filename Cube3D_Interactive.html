@@ -2,7 +2,7 @@
 <html>
 
 <body>
-    <canvas width="500" height="500" id="my_Canvas"></canvas>
+    <canvas width = "500" height = "500" id = "my_Canvas"></canvas>
 
     <script>
         var canvas = document.getElementById('my_Canvas');
@@ -50,22 +50,21 @@
             new Uint16Array(indices),
             gl.STATIC_DRAW);
 
-        var vertCode = 'attribute vec3 position;' +
-            'uniform mat4 Pmatrix;' +
-            'uniform mat4 Vmatrix;' +
-            'uniform mat4 Mmatrix;' +
-            'attribute vec3 color;' +//the color of the point
-            'varying vec3 vColor;' +
-
-            'void main(void) {' + //pre-built function
-            'gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.) ;' +
-            'vColor = color;' +
+        var vertCode = 'attribute vec3 position;'+
+            'uniform mat4 Pmatrix;'+
+            'uniform mat4 Vmatrix;'+
+            'uniform mat4 Mmatrix;'+
+            'attribute vec3 color;'+//the color of the point
+            'varying vec3 vColor;'+
+            'void main(void) { '+//pre-built function
+               'gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);'+
+               'vColor = color;'+
             '}';
 
-        var fragCode = 'precision mediump float;' +
-            'varying vec3 vColor;' +
-            'void main(void){' +
-            'gl_FragColor = vec4(vColor, 1.);' +
+         var fragCode = 'precision mediump float;'+
+            'varying vec3 vColor;'+
+            'void main(void) {'+
+               'gl_FragColor = vec4(vColor, 1.);'+
             '}';
 
         var vertShader = gl.createShader(gl.VERTEX_SHADER);
@@ -82,22 +81,22 @@
         gl.linkProgram(shaderProgram);
 
         /*======== Associating attributes to vertex shader =====*/
-        var Pmatrix = gl.getUniformLocation(shaderProgram, "Pmatrix");
-        var Vmatrix = gl.getUniformLocation(shaderProgram, "Vmatrix");
-        var Mmatrix = gl.getUniformLocation(shaderProgram, "Mmatrix");
+        var _Pmatrix = gl.getUniformLocation(shaderProgram, "Pmatrix");
+        var _Vmatrix = gl.getUniformLocation(shaderProgram, "Vmatrix");
+        var _Mmatrix = gl.getUniformLocation(shaderProgram, "Mmatrix");
 
         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-        var position = gl.getAttribLocation(shaderProgram, "position");
-        gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 0, 0);
+        var _position = gl.getAttribLocation(shaderProgram, "position");
+        gl.vertexAttribPointer(_position, 3, gl.FLOAT, false, 0, 0);
 
         //Position
-        gl.enableVertexAttribArray(position);
+        gl.enableVertexAttribArray(_position);
         gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
-        var color = gl.getAttribLocation(shaderProgram, "color");
-        gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 0, 0);
+        var _color = gl.getAttribLocation(shaderProgram, "color");
+        gl.vertexAttribPointer(_color, 3, gl.FLOAT, false, 0, 0);
 
         //Color
-        gl.enableVertexAttribArray(color);
+        gl.enableVertexAttribArray(_color);
         gl.useProgram(shaderProgram);
 
         /*==================== MATRIX =====================*/
@@ -183,13 +182,16 @@
         }
 
         /*================= Drawing =================*/
-        var THETA = 0, PHI = 0;
-        var time_old = 0;
-        var animate = function(time) {
+        var THETA = 0,
+         PHI = 0;
+         var time_old = 0;
+
+         var animate = function(time) {
             var dt = time-time_old;
+
             if (!drag) {
-                dX *= AMORTIZATION, dY *= AMORTIZATION;
-                THETA += dX, PHI += dY;
+               dX *= AMORTIZATION, dY*=AMORTIZATION;
+               THETA+=dX, PHI+=dY;
             }
 
             //set model matrix to I4
@@ -212,17 +214,16 @@
             time_old = time;
             gl.enable(gl.DEPTH_TEST);
 
-            gl.enable(gl.DEPTH_TEST);
-            gl.depthFunc(gl.LEQUAL);
+            // gl.depthFunc(gl.LEQUAL);
             gl.clearColor(0.5, 0.5, 0.5, 0.9);
             gl.clearDepth(1.0);
-
+            
             gl.viewport(0.0, 0.0, canvas.width, canvas.height);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            gl.uniformMatrix4fv(Pmatrix, false, proj_matrix);
-            gl.uniformMatrix4fv(Vmatrix, false, view_matrix);
-            gl.uniformMatrix4fv(Mmatrix, false, mov_matrix);
+            gl.uniformMatrix4fv(_Pmatrix, false, proj_matrix);
+            gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
+            gl.uniformMatrix4fv(_Mmatrix, false, mo_matrix);
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer);
             gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
