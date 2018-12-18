@@ -19,12 +19,12 @@
         ];
 
         var colors = [
-            5, 3, 7, 5, 3, 7, 5, 3, 7, 5, 3, 7,
-            1, 1, 3, 1, 1, 3, 1, 1, 3, 1, 1, 3,
-            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-            1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
-            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0
+            0,0,0, 0,0,0, 0,0,0, 0,0,0,
+            1,1,3, 1,1,3, 1,1,3, 1,1,3,
+            0,0,1, 0,0,1, 0,0,1, 0,0,1,
+            1,0,0, 1,0,0, 1,0,0, 1,0,0,
+            1,1,0, 1,1,0, 1,1,0, 1,1,0,
+            0,1,0, 0,1,0, 0,1,0, 0,1,0
         ];
 
         var indices = [
@@ -170,9 +170,9 @@
         var animate = function (time) {
 
             var dt = time - time_old;
-            rotateZ(mov_matrix, dt * 0.005);//time
-            rotateY(mov_matrix, dt * 0.002);
-            rotateX(mov_matrix, dt * 0.003);
+            rotateZ(mov_matrix, dt * 0.0001);//time
+            rotateY(mov_matrix, dt * 0.001);
+            rotateX(mov_matrix, dt * 0.0001);
             time_old = time;
 
             gl.enable(gl.DEPTH_TEST);
